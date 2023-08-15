@@ -52,17 +52,17 @@ DEFAULT_STEPS_PARAMETERS_DICT = {
 
 def process_scan(in_directory,
                  out_directory,
-                 do_steps_dict=None,
-                 steps_parameters_dict=None,
+                 do_steps_dict,
+                 steps_parameters_dict,
                  save_steps=True):
     
     if save_steps:
         Path(os.path.join(("\\".join(out_directory.split("\\")[:-1])), "steps")).mkdir(parents=True, exist_ok=True)
     
-    if do_steps_dict is None:
-        do_steps_dict = DEFAULT_DO_STEPS_DICT
-    if steps_parameters_dict is None:
-        steps_parameters_dict = DEFAULT_STEPS_PARAMETERS_DICT
+    # if do_steps_dict is None:
+    #     do_steps_dict = DEFAULT_DO_STEPS_DICT
+    # if steps_parameters_dict is None:
+    #     steps_parameters_dict = DEFAULT_STEPS_PARAMETERS_DICT
 
     imp = ij.IJ.openImage(in_directory)
     width, height = imp.shape[:2]

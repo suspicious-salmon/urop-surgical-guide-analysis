@@ -17,7 +17,7 @@ def heatmap(img_cad_dir, img_scan_dir, out_dir):
     img_gained_material = np.logical_and(img_cad == 0, img_scan == 255).astype(int)
 
     heatmap = cv2.cvtColor(255-img_cad, cv2.COLOR_GRAY2RGB)
-    heatmap[img_lost_material == 1] = (255,0,0)
-    heatmap[img_gained_material == 1] = (0,0,255)
+    heatmap[img_lost_material == 1] = (0,0,255)
+    heatmap[img_gained_material == 1] = (255,0,0)
 
     cv2.imwrite(out_dir, heatmap)
