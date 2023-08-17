@@ -57,7 +57,7 @@ def save_path2D(slice_2D, img_directory):
     fig.add_axes(axis)
 
     for points in slice_2D.discrete:
-        axis.plot(*points.T, color="k")
+        axis.plot(*points.T, color="k", linewidth=0.2)
 
     fig.savefig(img_directory, dpi=dpi)
 

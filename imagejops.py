@@ -50,6 +50,8 @@ DEFAULT_STEPS_PARAMETERS_DICT = {
     "threshold" : 70,
 }
 
+DEFAULT_ALIGN_ARGUMENT = "run('Linear Stack Alignment with SIFT', 'initial_gaussian_blur=5 steps_per_scale_octave=3 minimum_image_size=64 maximum_image_size=1024 feature_descriptor_size=5 feature_descriptor_orientation_bins=8 closest/next_closest_ratio=0.92 maximal_alignment_error=25 inlier_ratio=0.05 expected_transformation=Rigid interpolate')"
+
 def process_scan(in_directory,
                  out_directory,
                  do_steps_dict,
@@ -164,11 +166,13 @@ def process_scan(in_directory,
     
     return img.shape[1], img.shape[0]
     
-def align(in_directory, out_directory):
+def align(in_directory, out_directory, align_argument):
     macro = ";".join([
         f"File.openSequence('{to_imagej_path(in_directory)}')",
         # "run('Linear Stack Alignment with SIFT', 'initial_gaussian_blur=5 steps_per_scale_octave=3 minimum_image_size=64 maximum_image_size=1024 feature_descriptor_size=5 feature_descriptor_orientation_bins=8 closest/next_closest_ratio=0.92 maximal_alignment_error=25 inlier_ratio=0.05 expected_transformation=Rigid interpolate')",
-        "run('Linear Stack Alignment with SIFT', 'initial_gaussian_blur=3 steps_per_scale_octave=10 minimum_image_size=32 maximum_image_size=128 feature_descriptor_size=5 feature_descriptor_orientation_bins=8 closest/next_closest_ratio=0.92 maximal_alignment_error=10 inlier_ratio=0.05 expected_transformation=Rigid interpolate')",
+        align_argument,
+        # "run('Linear Stack Alignment with SIFT', 'initial_gaussian_blur=2 steps_per_scale_octave=10 minimum_image_size=32 maximum_image_size=128 feature_descriptor_size=10 feature_descriptor_orientation_bins=16 closest/next_closest_ratio=0.95 maximal_alignment_error=10 inlier_ratio=0.05 expected_transformation=Rigid interpolate')",
+        # "run('Linear Stack Alignment with SIFT', 'initial_gaussian_blur=3 steps_per_scale_octave=10 minimum_image_size=16 maximum_image_size=256 feature_descriptor_size=5 feature_descriptor_orientation_bins=8 closest/next_closest_ratio=0.95 maximal_alignment_error=15 inlier_ratio=0.05 expected_transformation=Rigid interpolate')",
         f"run('Image Sequence... ', 'dir=[{to_imagej_path(out_directory)}] format=TIFF')",
         "run('Close All')"
     ])
