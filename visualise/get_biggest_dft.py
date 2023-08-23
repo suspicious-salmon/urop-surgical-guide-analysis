@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import os
 import cv2
 
+import utility as u
+
 %matplotlib qt
 
 parts_csv_dir = r"C:\temporary work folder gsk35\UIUCMxD\mxd_258key.csv"
@@ -55,7 +57,7 @@ for count, row in column_sort["DFT_slot2_thick_mm"].iterrows():
     ax.set_title(f"serial : {row['serial']} \n"
                 f"DFT_slot2_thick_mm : {row['DFT_slot2_thick_mm']:.4f} \n")
     
-    img = cv2.imread(os.path.join(output_dir, row["serial"], "heatmap.tif"))
+    img = u.readim(os.path.join(output_dir, row["serial"], "heatmap.tif"))
     ax.imshow(img)
 
 plt.tight_layout()

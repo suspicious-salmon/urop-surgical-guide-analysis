@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 import pandas as pd
 
+import utility as u
+
 def get_img_metrics(img):
     img_metric = img.copy()
     # make all white pixels black (to make only red and blue left)
@@ -29,7 +31,7 @@ def get_directory_metrics(source_dir, dest_dir=None):
     df_list = []
     for item in tqdm(items, total=itemcount):
         if item.is_dir():
-            img = cv2.cvtColor(cv2.imread(os.path.join(source_dir, item.name, "heatmap.tif"), cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB)
+            img = cv2.cvtColor(u.readim(os.path.join(source_dir, item.name, "heatmap.tif"), cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB)
             df_list.append((item.name, *get_img_metrics(img)))
 
     df = pd.DataFrame(df_list, columns=["serial", "prop_lost_px", "prop_gained_px", "prop_changed_px"])

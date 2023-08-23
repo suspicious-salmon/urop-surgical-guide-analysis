@@ -48,7 +48,7 @@ metadata_dict = {
     "steps_parameters_dict" : steps_parameters,
     "sift_align_argument" : sift_align_argument
 }
-with open(os.path.join(output_folder, "metadata.json"), "w") as fp:
+with open(os.path.join(output_folder, "metadata.json"), "x") as fp:
     json.dump(metadata_dict, fp)
 
 rows = parts_df.iterrows()

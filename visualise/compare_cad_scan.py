@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import cv2
 import numpy as np
 
+import utility as u
+
 cad_dirs = [
     r"C:\temporary work folder gsk35\UROP tests 2\f\s1\image0.tif",
     r"C:\temporary work folder gsk35\UROP tests 2\f\s2\image0.tif",
@@ -24,15 +26,15 @@ Ms = [
 for i in range(len(cad_dirs)):
 
     cad_dir = cad_dirs[i]
-    img_cad = cv2.imread(cad_dir, cv2.IMREAD_GRAYSCALE)
+    img_cad = u.readim(cad_dir, cv2.IMREAD_GRAYSCALE)
 
     scan_dir = scan_dirs[i]
-    img_scan = cv2.imread(scan_dir, cv2.IMREAD_COLOR)
+    img_scan = u.readim(scan_dir, cv2.IMREAD_COLOR)
     M = Ms[i]
     img_scan = cv2.warpAffine(img_scan, M, (img_scan.shape[1], img_scan.shape[0]))
 
     # aligned_dir = r"C:\temporary work folder gsk35\UROP tests 2\f\out1\Aligned 2 of 20001.tif"
-    # img_aligned = cv2.imread(aligned_dir, cv2.IMREAD_COLOR)
+    # img_aligned = u.readim(aligned_dir, cv2.IMREAD_COLOR)
 
     img_scan[img_cad > 200] = (100,100,100)
 

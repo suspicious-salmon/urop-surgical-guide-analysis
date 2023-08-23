@@ -8,10 +8,13 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import math
 
+import utility as u
+
 # SCAN_WIDTH, SCAN_HEIGHT = 4901, 4779
 # SCAN_WIDTH, SCAN_HEIGHT = 5313, 5158
 
 def pad_image(image, target_width, target_height, pad_value=0):
+    """Pads image with equal amount of pixels on top & bottom and on left & right."""
     pad_vertical = target_height-image.shape[0]
     pad_horizontal = target_width-image.shape[1]
     image = cv2.copyMakeBorder(image,
@@ -31,7 +34,7 @@ def resize_image(image, target_dimensions):
     else:
         scale_dimensions = (int(final_width), int(height * final_width/width))
         
-    image = cv2.resize(image, scale_dimensions, interpolation=cv2.INTER_LINEAR)
+    image = cv2.resize(image, scale_dimensions, interpolation=cv2.INTER_NEAREST)
     image = pad_image(image, final_width, final_height, 0)
     return image
 
@@ -78,7 +81,7 @@ def cad_to_img(stl_directory, img_directory, scan_width, scan_height):
 
     # save stl as image, then read again (couldn't find a nice way to export straight from matplotlib to opencv). weirdly, all the information of the image gets saved by matplotlib in its alpha channel. So I take only this channel for the grayscale one.
     save_path2D(section, img_directory)
-    img = cv2.imread(img_directory, cv2.IMREAD_UNCHANGED)[:,:,3]
+    img = u.readim(img_directory, cv2.IMREAD_UNCHANGED)[:,:,3]
 
     # for some reason despite img having the same dtype and shape as a grayscale image, opencv floodfill does nothing unless this is done.
     img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGRA)

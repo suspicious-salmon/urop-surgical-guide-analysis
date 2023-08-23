@@ -2,9 +2,11 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
+import utility as u
+
 def heatmap(img_cad_dir, img_scan_dir, out_dir):
-    img_cad = cv2.imread(img_cad_dir, cv2.IMREAD_GRAYSCALE)
-    img_scan = cv2.imread(img_scan_dir, cv2.IMREAD_GRAYSCALE)
+    img_cad = u.readim(img_cad_dir, cv2.IMREAD_GRAYSCALE)
+    img_scan = u.readim(img_scan_dir, cv2.IMREAD_GRAYSCALE)
 
     # shouldn't be necessary, input images should already be binary
     img_cad = cv2.threshold(img_cad, 20, 255, cv2.THRESH_BINARY)[1]
