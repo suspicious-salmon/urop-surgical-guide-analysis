@@ -18,7 +18,9 @@ SERIALS_LIST = [
 ]
 
 metrics_df = pd.read_json(os.path.join(output_folder, "metrics.json"))
-sorted_metrics_df = metrics_df.sort_values("prop_changed_px", ascending=False, ignore_index=True)
+# sorted_metrics_df = metrics_df.sort_values("prop_changed_px", ascending=False, ignore_index=True)
+sorted_metrics_df = metrics_df.sort_values("serial", ascending=True, ignore_index=True)
+
 print(sorted_metrics_df)
 
 for count, row in tqdm(sorted_metrics_df.iterrows(), total=metrics_df.shape[0]):
