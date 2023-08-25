@@ -22,18 +22,17 @@ def get_img_metrics(img):
 
     return (prop_lost_px, prop_gained_px, prop_changed_px)
 
-def get_directory_metrics(source_dir, dest_dir=None):
-    if dest_dir is None:
-        dest_dir = source_dir
-
-    items = os.scandir(source_dir)
-    itemcount = len(list(os.scandir(source_dir)))
+def get_directory_metrics(source_folder, dest_folder):
     df_list = []
-    for item in tqdm(items, total=itemcount):
-        if item.is_dir():
-            img = cv2.cvtColor(u.readim(os.path.join(source_dir, item.name, "heatmap.tif"), cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB)
-            df_list.append((item.name, *get_img_metrics(img)))
+    for file in tqdm(os.scandir(source_folder), total=len(list(os.scandir(source_folder)))):
+        heatmap = cv2.cvtColor(u.readim(os.path.join(source_folder, file.name), cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB)
+        df_list.append((file.name.split("_")[0], *get_img_metrics(heatmap)))
 
     df = pd.DataFrame(df_list, columns=["serial", "prop_lost_px", "prop_gained_px", "prop_changed_px"])
-    df.to_json(os.path.join(dest_dir, "metrics.json"))
+    if not os.path.isfile(os.path.join(dest_folder, "metrics.json")):
+        df.to_json(os.path.join(dest_folder, "metrics.json"))
+    else:
+        print("WARNING: a metrics file already exists. Metrics will be saved in metrics_overwrite.json. It is at risk of being overwritten next time this code is run.")
+        df.to_json(os.path.join(dest_folder, "metrics_overwrite.json"))
+        
     # df.to_pickle(os.path.join(dest_dir, "metrics.pickle"))

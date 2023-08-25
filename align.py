@@ -15,7 +15,7 @@ import utility as u
 # scan_dir = "E:\greg\Results\Run4\GUIDE-0001-0000\GUIDE-0001-0000_image1.tif"
 # output_folder = "E:\greg\Results\Aligned1"
 
-def align_ccorr(cad_dir, scan_dir, output_folder):
+def align_ccorr(cad_dir, scan_dir, output_dirs):
     cad_img = u.readim(cad_dir, cv2.IMREAD_GRAYSCALE)
     scan_img = u.readim(scan_dir, cv2.IMREAD_GRAYSCALE)
 
@@ -60,17 +60,17 @@ def align_ccorr(cad_dir, scan_dir, output_folder):
     cad_img_inflated = cv2.dilate(cad_img, kernel)
     scan_out[cad_img_inflated == 0] = 0
 
-    cv2.imwrite(os.path.join(output_folder, "aligned.tif"), scan_out)
+    u.writeim(output_dirs["aligned"], scan_out)
 
     extra_pixels = scan_out.copy()
     extra_pixels[cad_img != 0] = 0
-    cv2.imwrite(os.path.join(output_folder, "extra_pixels.tif"), extra_pixels)
+    u.writeim(output_dirs["extra_pixels"], extra_pixels)
 
     missing_pixels = cad_img.copy()
     missing_pixels[scan_out > 20] = 0
-    cv2.imwrite(os.path.join(output_folder, "missing_pixels.tif"), missing_pixels)
+    u.writeim(output_dirs["missing_pixels"], missing_pixels)
 
-def crop_to_inflated_cad(cad_dir, img_dir, out_dir, kernel_size=300):
+def crop_to_inflated_cad(cad_dir, img_dir, out_dir, kernel_size=300, overwrite=False):
     cad_img = u.readim(cad_dir, cv2.IMREAD_GRAYSCALE)
     img = u.readim(img_dir, cv2.IMREAD_GRAYSCALE)
 
@@ -78,10 +78,10 @@ def crop_to_inflated_cad(cad_dir, img_dir, out_dir, kernel_size=300):
     cad_img_inflated = cv2.dilate(cad_img, kernel)
     img[cad_img_inflated == 0] = 0
 
-    plt.imshow(img)
-    plt.show()
+    # plt.imshow(img)
+    # plt.show()
 
-    cv2.imwrite(out_dir, img)
+    u.writeim(out_dir, img, overwrite)
 
 # %%
 # def main():

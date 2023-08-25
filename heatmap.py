@@ -22,4 +22,4 @@ def heatmap(img_cad_dir, img_scan_dir, out_dir):
     heatmap[img_lost_material == 1] = (0,0,255)
     heatmap[img_gained_material == 1] = (255,0,0)
 
-    cv2.imwrite(out_dir, heatmap)
+    u.writeim(out_dir, heatmap)

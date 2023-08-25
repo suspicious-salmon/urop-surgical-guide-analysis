@@ -25,4 +25,4 @@ img[cad_img_inflated == 0] = 100
 plt.imshow(img)
 plt.show()
 
-# cv2.imwrite(out_dir, img)
+# u.writeim(out_dir, img)

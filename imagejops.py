@@ -3,10 +3,11 @@ from matplotlib import pyplot as plt
 import cv2
 import imagej
 from pathlib import Path
-
 import os
 # import scyjava as sj
 # import jnius <- currently causes crash on import
+
+import utility as u
 
 print("Initialising Fiji...")
 ij = imagej.init("sc.fiji:fiji", mode="interactive")
@@ -88,8 +89,7 @@ def process_scan(in_directory,
         img = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
 
         if save_steps:
-            if not cv2.imwrite(os.path.join(("\\".join(out_directory.split("\\")[:-1])), "steps\\im1.tif"), img):
-                raise Exception("Couldn't save im1")
+            u.writeim(os.path.join(("\\".join(out_directory.split("\\")[:-1])), "steps\\im1.tif"), img)
     
     # -------------
 
@@ -97,8 +97,7 @@ def process_scan(in_directory,
     # BILATERAL_BLUR_SIZE = 11
     # img = cv2.bilateralFilter(img, BILATERAL_BLUR_SIZE, BILATERAL_BLUR_SIZE, BILATERAL_BLUR_SIZE)
 
-    # if not cv2.imwrite(os.path.join(("\\".join(out_directory.split("\\")[:-1])), "im2.tif"), img):
-    #     raise Exception("Couldn't save im2")
+    # u.writeim(os.path.join(("\\".join(out_directory.split("\\")[:-1])), "im2.tif"), img)
     
     # ---------------
     # Max Val Scale
@@ -109,14 +108,12 @@ def process_scan(in_directory,
         img = (img.astype(float)*255/max_val).astype(np.uint8)
 
         if save_steps:
-            if not cv2.imwrite(os.path.join(("\\".join(out_directory.split("\\")[:-1])), "steps\\im3.tif"), img):
-                raise Exception("Couldn't save im3")
+            u.writeim(os.path.join(("\\".join(out_directory.split("\\")[:-1])), "steps\\im3.tif"), img)
 
     # --------------
 
     # convert from numpy to imj image
-    if not cv2.imwrite(out_directory, img):
-        raise Exception(f"Step 1and2 image from {in_directory} could not be written to {out_directory}")
+    u.writeim(out_directory, img)
     imp = ij.IJ.openImage(out_directory)
     width, height = imp.shape[:2]
 
@@ -131,8 +128,7 @@ def process_scan(in_directory,
     img = fiji2numpy(imp, shape=(height,width))
 
     if save_steps:
-        if not cv2.imwrite(os.path.join(("\\".join(out_directory.split("\\")[:-1])), "steps\\im4.tif"), img):
-            raise Exception("Couldn't save im4")
+        u.writeim(os.path.join(("\\".join(out_directory.split("\\")[:-1])), "steps\\im4.tif"), img)
     
     # --------------
     # Second Close
@@ -143,8 +139,7 @@ def process_scan(in_directory,
         img = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
 
         if save_steps:
-            if not cv2.imwrite(os.path.join(("\\".join(out_directory.split("\\")[:-1])), "steps\\im5.tif"), img):
-                raise Exception("Couldn't save im5")
+            u.writeim(os.path.join(("\\".join(out_directory.split("\\")[:-1])), "steps\\im5.tif"), img)
         
     # --------------
 
@@ -155,14 +150,12 @@ def process_scan(in_directory,
         img = cv2.threshold(img, steps_parameters_dict["threshold"], 255, cv2.THRESH_BINARY)[1]
 
         if save_steps:
-            if not cv2.imwrite(os.path.join(("\\".join(out_directory.split("\\")[:-1])), "steps\\im6.tif"), img):
-                raise Exception("Couldn't save im6")
+            u.writeim(os.path.join(("\\".join(out_directory.split("\\")[:-1])), "steps\\im6.tif"), img)
         
     # ---------------
 
     # output
-    if not cv2.imwrite(out_directory, img):
-        raise Exception(f"Step 3and4 image from {out_directory} could not be written to {out_directory}")
+    u.writeim(out_directory, img, overwrite=True)
     
     return img.shape[1], img.shape[0]
     

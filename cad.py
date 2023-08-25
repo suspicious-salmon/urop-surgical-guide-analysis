@@ -7,6 +7,7 @@ import cv2
 from PIL import Image
 import matplotlib.pyplot as plt
 import math
+import os
 
 import utility as u
 
@@ -62,7 +63,10 @@ def save_path2D(slice_2D, img_directory):
     for points in slice_2D.discrete:
         axis.plot(*points.T, color="k", linewidth=0.2)
 
-    fig.savefig(img_directory, dpi=dpi)
+    if not os.path.isfile(img_directory):
+        fig.savefig(img_directory, dpi=dpi)
+    else:
+        raise OSError("Cad outline image already exists")
 
 def cad_to_img(stl_directory, img_directory, scan_width, scan_height):
 
@@ -80,8 +84,8 @@ def cad_to_img(stl_directory, img_directory, scan_width, scan_height):
     section, _ = myslice.to_planar()
 
     # save stl as image, then read again (couldn't find a nice way to export straight from matplotlib to opencv). weirdly, all the information of the image gets saved by matplotlib in its alpha channel. So I take only this channel for the grayscale one.
-    save_path2D(section, img_directory)
-    img = u.readim(img_directory, cv2.IMREAD_UNCHANGED)[:,:,3]
+    save_path2D(section, img_directory[:-4]+"_mpl.tif")
+    img = u.readim(img_directory[:-4]+"_mpl.tif", cv2.IMREAD_UNCHANGED)[:,:,3]
 
     # for some reason despite img having the same dtype and shape as a grayscale image, opencv floodfill does nothing unless this is done.
     img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGRA)
@@ -96,4 +100,4 @@ def cad_to_img(stl_directory, img_directory, scan_width, scan_height):
     img = pad_image(img, scan_width, scan_height)
 
     # output
-    cv2.imwrite(img_directory, img)
+    u.writeim(img_directory, img, overwrite=True)
