@@ -4,16 +4,12 @@ import cv2
 import imagej
 from pathlib import Path
 import os
-# import scyjava as sj
 # import jnius <- currently causes crash on import
 
 import utility as u
 
 print("Initialising Fiji...")
 ij = imagej.init("sc.fiji:fiji", mode="interactive")
-# FolderOpener = sj.jimport('ij.plugin.FolderOpener')
-# StackWriter = sj.jimport('ij.plugin.StackWriter')
-# ImagePlus = jnius.autoclass('ij.ImagePlus')
 print("Done initialising Fiji")
 
 def fiji2numpy(fiji_image, shape):
@@ -26,7 +22,7 @@ def fiji2numpy(fiji_image, shape):
 def to_imagej_path(path):
     return path.replace("\\", "/")
 
-# currently cannot be used as jnius causes crash on import
+# currently doesn't work as jnius causes crash on import
 # def numpy2fiji(numpy_image):
 #     imagej_image = ij.py.to_java(numpy_image)
 #     imagej_image = ij.dataset().create(imp)
@@ -61,11 +57,6 @@ def process_scan(in_directory,
     
     if save_steps:
         Path(os.path.join(("\\".join(out_directory.split("\\")[:-1])), "steps")).mkdir(parents=True, exist_ok=True)
-    
-    # if do_steps_dict is None:
-    #     do_steps_dict = DEFAULT_DO_STEPS_DICT
-    # if steps_parameters_dict is None:
-    #     steps_parameters_dict = DEFAULT_STEPS_PARAMETERS_DICT
 
     imp = ij.IJ.openImage(in_directory)
     width, height = imp.shape[:2]
@@ -90,14 +81,6 @@ def process_scan(in_directory,
 
         if save_steps:
             u.writeim(os.path.join(("\\".join(out_directory.split("\\")[:-1])), "steps\\im1.tif"), img)
-    
-    # -------------
-
-    # bilateral blur
-    # BILATERAL_BLUR_SIZE = 11
-    # img = cv2.bilateralFilter(img, BILATERAL_BLUR_SIZE, BILATERAL_BLUR_SIZE, BILATERAL_BLUR_SIZE)
-
-    # u.writeim(os.path.join(("\\".join(out_directory.split("\\")[:-1])), "im2.tif"), img)
     
     # ---------------
     # Max Val Scale
@@ -159,13 +142,10 @@ def process_scan(in_directory,
     
     return img.shape[1], img.shape[0]
     
-def align(in_directory, out_directory, align_argument):
+def align_sift(in_directory, out_directory, align_argument):
     macro = ";".join([
         f"File.openSequence('{to_imagej_path(in_directory)}')",
-        # "run('Linear Stack Alignment with SIFT', 'initial_gaussian_blur=5 steps_per_scale_octave=3 minimum_image_size=64 maximum_image_size=1024 feature_descriptor_size=5 feature_descriptor_orientation_bins=8 closest/next_closest_ratio=0.92 maximal_alignment_error=25 inlier_ratio=0.05 expected_transformation=Rigid interpolate')",
         align_argument,
-        # "run('Linear Stack Alignment with SIFT', 'initial_gaussian_blur=2 steps_per_scale_octave=10 minimum_image_size=32 maximum_image_size=128 feature_descriptor_size=10 feature_descriptor_orientation_bins=16 closest/next_closest_ratio=0.95 maximal_alignment_error=10 inlier_ratio=0.05 expected_transformation=Rigid interpolate')",
-        # "run('Linear Stack Alignment with SIFT', 'initial_gaussian_blur=3 steps_per_scale_octave=10 minimum_image_size=16 maximum_image_size=256 feature_descriptor_size=5 feature_descriptor_orientation_bins=8 closest/next_closest_ratio=0.95 maximal_alignment_error=15 inlier_ratio=0.05 expected_transformation=Rigid interpolate')",
         f"run('Image Sequence... ', 'dir=[{to_imagej_path(out_directory)}] format=TIFF')",
         "run('Close All')"
     ])

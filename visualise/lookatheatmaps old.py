@@ -25,6 +25,7 @@ SERIALS_LIST = [
 
 metrics_df = pd.read_json(os.path.join(output_folder, "metrics.json"))
 sorted_metrics_df = metrics_df.sort_values("prop_changed_px", ascending=False, ignore_index=True)
+print(sorted_metrics_df["serial"], sorted_metrics_df["prop_changed_px"])
 # sorted_metrics_df = metrics_df.sort_values("serial", ascending=True, ignore_index=True)
 
 print(sorted_metrics_df)
@@ -34,9 +35,9 @@ for count, row in tqdm(sorted_metrics_df.iterrows(), total=metrics_df.shape[0]):
 
         print(row["serial"])
         print(parts_df.loc[parts_df["serial"] == row["serial"]]["img_name"])
-        scan = u.readim(os.path.join(output_folder, "aligned_scans", row["serial"] + "_aligned.tif"), cv2.IMREAD_COLOR)
-        processed_scan = u.readim(os.path.join(output_folder, "steps", row["serial"] + "_processed.tif"), cv2.IMREAD_COLOR)
-        heatmap = cv2.cvtColor(u.readim(os.path.join(output_folder, "light_heatmaps", row["serial"] + "_heatmap.tif"), cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB)
+        scan = u.readim(os.path.join(images_folder, parts_df.loc[parts_df["serial"] == row["serial"]]["img_name"].item()), cv2.IMREAD_COLOR)
+        processed_scan = u.readim(os.path.join(output_folder, row["serial"], row["serial"] + "_image1.tif"), cv2.IMREAD_COLOR)
+        heatmap = cv2.cvtColor(u.readim(os.path.join(output_folder, row["serial"], "heatmap_ccor.tif"), cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB)
 
         # convert grayscale to green
         processed_scan[np.where(processed_scan[:,:,0] == 255)] = (0,255,0)
