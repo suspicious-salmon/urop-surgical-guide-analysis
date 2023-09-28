@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 import pandas as pd
 
-import utility as u
+import _cvutil
 
 def get_img_metrics(img):
     img_metric = img.copy()
@@ -25,7 +25,7 @@ def get_img_metrics(img):
 def get_directory_metrics(source_folder, dest_folder):
     df_list = []
     for file in tqdm(os.scandir(source_folder), total=len(list(os.scandir(source_folder)))):
-        heatmap = cv2.cvtColor(u.readim(os.path.join(source_folder, file.name), cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB)
+        heatmap = cv2.cvtColor(_cvutil.readim(os.path.join(source_folder, file.name), cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB)
         df_list.append((file.name.split("_")[0], *get_img_metrics(heatmap)))
 
     df = pd.DataFrame(df_list, columns=["serial", "prop_lost_px", "prop_gained_px", "prop_changed_px"])

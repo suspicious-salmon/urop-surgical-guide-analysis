@@ -4,12 +4,12 @@ from tqdm import tqdm
 from pathlib import Path
 import json
 
-import cad
-import imagejops
+import _cad
+import scan
 import heatmap
 import metrics
-import align
-import utility
+import _align
+import _cvutil
 
 output_folder = r"E:\greg\Results\Run8"
 cad_folder = r"C:\temporary work folder gsk35\UIUCMxD\CAD"
@@ -63,15 +63,15 @@ rows = parts_df.iterrows()
 
 for idx, row in tqdm(rows, total=parts_df.shape[0]):
     try:
-        width, height = utility.get_file_image_dimensions(os.path.join(images_folder, row["img_name"]))
+        width, height = _cvutil.get_file_image_dimensions(os.path.join(images_folder, row["img_name"]))
 
-        # process and write cad file to destination folder
-        img_cad = cad.cad_to_img(os.path.join(cad_folder, row["mockingbird_file"]),
+        # process and write cad file to destination folder. make it the same resolution as the corresponding scan file.
+        img_cad = _cad.cad_to_img(os.path.join(cad_folder, row["mockingbird_file"]),
                                 os.path.join(output_folder, "cads", row["serial"] + "_cad.tif"),
                                 width, height)
 
         # align scan to cad
-        align.align_ccorr(
+        _align.align_ccorr(
             os.path.join(output_folder, "cads", row["serial"] + "_cad.tif"),
             os.path.join(images_folder, row["img_name"]),
             {
@@ -89,7 +89,7 @@ for idx, row in tqdm(rows, total=parts_df.shape[0]):
                                save_steps=False)
         
         # processing introduces some artifacts around previous crop. remove these by cropping again with a slightly smaller kernel.
-        align.crop_to_inflated_cad(os.path.join(output_folder, "cads", row["serial"] + "_cad.tif"),
+        _align.crop_to_inflated_cad(os.path.join(output_folder, "cads", row["serial"] + "_cad.tif"),
                                    os.path.join(output_folder, "steps", row["serial"] + "_processed.tif"),
                                    os.path.join(output_folder, "steps", row["serial"] + "_processed.tif"),
                                    kernel_size=275,
