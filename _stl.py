@@ -55,7 +55,7 @@ def resize_image(image, target_dimensions, pad_value=0):
 PX_PER_MM = 94.0 # the scale factor I used to scale up the surgical guide STL files.
 VIEW_SCALE = 5 # for ease of viewing in matplotlig, useful while debugging
 d = 0 # extra space on each side, in mm
-def save_path2D(slice_2D, img_directory, px_per_mm = PX_PER_MM):
+def _save_path2D(slice_2D, img_directory, px_per_mm = PX_PER_MM):
     """Inspired by trimesh source code, outputs the path2D at the correct pixels per inch as a black-and-white image.
     note, this function is slightly flawed. When plotted in matplotlib, edges must be thick enough to fill the part with white later.
     This results in a slightly bigger outline than in reality of appxoimately <> pixels, or <> mm.
@@ -127,7 +127,7 @@ def cad_to_img(stl_directory, img_directory, target_width=None, target_height=No
     section, _ = myslice.to_planar()
 
     # save stl as image, then read again (couldn't find a nice way to export straight from matplotlib to opencv). weirdly, all the information of the image gets saved by matplotlib in its alpha channel. So I take only this channel for the grayscale one.
-    save_path2D(section, img_directory[:-4]+"_mpl.tif", px_per_mm=px_per_mm)
+    _save_path2D(section, img_directory[:-4]+"_mpl.tif", px_per_mm=px_per_mm)
     img = _cvutil.readim(img_directory[:-4]+"_mpl.tif", cv2.IMREAD_UNCHANGED)[:,:,3]
 
     # for some reason despite img having the same dtype and shape as a grayscale image, opencv floodfill does nothing unless this is done.

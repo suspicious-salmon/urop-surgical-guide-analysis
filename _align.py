@@ -5,7 +5,7 @@ from scipy.optimize import minimize_scalar
 
 import _cvutil
 
-def align_ccorr(cad_dir, scan_dir, output_dirs, angle_bounds=(-60,0)):
+def align_ccorr(cad_dir, scan_dir, output_dirs, angle_bounds=(-180,180)):
     """Rotates and translates (black-and-white, i.e. 0 or 255) image at directory scan_dir to match image at directory cad_dir by minimising cross-correlation. Also saves:
     - missing pixels image: after alignment, map of pixels which are white in image at cad_dir but black in image at scan_dir
     - extra pixels image: after alignment, map of pixels which are white in image at scan_dir but black in image at cad_dir
@@ -17,7 +17,7 @@ def align_ccorr(cad_dir, scan_dir, output_dirs, angle_bounds=(-60,0)):
         output_dirs (dict): output directories dictionary {"aligned" : directory string to write aligned image from scan_dir,
             "extra_pixels" : directory string to write missing pixels image,
             "missing_pixels" : directory string to write extra pixels image}
-        angle_bounds (tuple): (min angle, max angle) range of angles within which to search for minium cross-correlation.
+        angle_bounds (tuple): (min angle, max angle) range of angles in degrees within which to search for minium cross-correlation. Defaults to plusminus 180 degrees.
     """
 
     cad_img = _cvutil.readim(cad_dir, cv2.IMREAD_GRAYSCALE)
