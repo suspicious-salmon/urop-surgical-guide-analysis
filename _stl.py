@@ -52,10 +52,9 @@ def resize_image(image, target_dimensions, pad_value=0):
     image = pad_image(image, final_width, final_height, pad_value)
     return image
 
-PX_PER_MM = 94.0 # the scale factor I used to scale up the surgical guide STL files.
-VIEW_SCALE = 5 # for ease of viewing in matplotlig, useful while debugging
+VIEW_SCALE = 5 # for ease of viewing in matplotlib, useful while debugging
 d = 0 # extra space on each side, in mm
-def _save_path2D(slice_2D, img_directory, px_per_mm = PX_PER_MM):
+def _save_path2D(slice_2D, img_directory, px_per_mm=1):
     """Inspired by trimesh source code, outputs the path2D at the correct pixels per inch as a black-and-white image.
     note, this function is slightly flawed. When plotted in matplotlib, edges must be thick enough to fill the part with white later.
     This results in a slightly bigger outline than in reality of appxoimately <> pixels, or <> mm.

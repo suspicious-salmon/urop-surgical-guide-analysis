@@ -12,12 +12,13 @@ from tqdm import tqdm
 
 import _cvutil
 
-output_folder = r"E:\greg\Results\Run8"
-cad_folder = r"C:\temporary work folder gsk35\UIUCMxD\CAD"
-images_folder = r"C:\temporary work folder gsk35\UIUCMxD\Images"
+root_results_folder = r"E:\greg\Organised Code\EnvTests\Results\Run1"
 
-parts_csv_dir = r"C:\temporary work folder gsk35\UIUCMxD\mxd_258key.csv"
-parts_df = pd.read_csv(parts_csv_dir)
+root_dataset_folder = r"E:\greg\Dogs\UIUCMxD"
+cad_folder = os.path.join(root_dataset_folder, "CAD")
+images_folder = os.path.join(root_dataset_folder, "Images")
+csv_directory = os.path.join(root_dataset_folder, "mxd_258key.csv")
+parts_df = pd.read_csv(csv_directory)
 
 # some serials that had interesting heatmaps
 SERIALS_LIST = [
@@ -27,7 +28,7 @@ SERIALS_LIST = [
     "GUIDE-1171-1540"
 ]
 
-metrics_df = pd.read_json(os.path.join(output_folder, "metrics.json"))
+metrics_df = pd.read_json(os.path.join(root_results_folder, "metrics.json"))
 sorted_metrics_df = metrics_df.sort_values("prop_changed_px", ascending=False, ignore_index=True)
 # sorted_metrics_df = metrics_df.sort_values("serial", ascending=True, ignore_index=True)
 
@@ -38,9 +39,9 @@ for count, row in tqdm(sorted_metrics_df.iterrows(), total=metrics_df.shape[0]):
 
         print(row["serial"])
         print(parts_df.loc[parts_df["serial"] == row["serial"]]["img_name"])
-        scan = _cvutil.readim(os.path.join(output_folder, "aligned_scans", row["serial"] + "_aligned.tif"), cv2.IMREAD_COLOR)
-        processed_scan = _cvutil.readim(os.path.join(output_folder, "steps", row["serial"] + "_processed.tif"), cv2.IMREAD_COLOR)
-        heatmap = cv2.cvtColor(_cvutil.readim(os.path.join(output_folder, "heatmaps", row["serial"] + "_heatmap.tif"), cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB)
+        scan = _cvutil.readim(os.path.join(root_results_folder, "aligned_scans", row["serial"] + "_aligned.tif"), cv2.IMREAD_COLOR)
+        processed_scan = _cvutil.readim(os.path.join(root_results_folder, "steps", row["serial"] + "_processed.tif"), cv2.IMREAD_COLOR)
+        heatmap = cv2.cvtColor(_cvutil.readim(os.path.join(root_results_folder, "heatmaps", row["serial"] + "_heatmap.tif"), cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB)
 
         # convert grayscale to green
         processed_scan[np.where(processed_scan[:,:,0] == 255)] = (0,255,0)
