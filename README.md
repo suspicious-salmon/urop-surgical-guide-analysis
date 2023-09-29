@@ -10,7 +10,7 @@ This repository contains code to analyse Bill King's sugrical guide dataset. The
 Please note that I have already run this code on the dataset. The folder containing the results is at <link!>
 
 There are also 2 other files, aimed at visualising and understanding the resutls.
-- `lookatheatmaps.py` allows you to look through plots the heatmaps compared with the original photo and cad file, by default in descending order of magnitude of error:
+- `lookatheatmaps.py` allows you to look through plots of the heatmaps compared with the original photo and cad file, by default in descending order of magnitude of error:
 ![alt text](https://github.com/suspicious-salmon/urop-surgical-guide-analysis/blob/main/readme-images/lookatheatmaps_demo.png?raw=true)
 - `get_biggest_dft.py` helps with finding parts which might have high errors. It sorts the csv file in Bill King's dataset, providing the highest-DFT (difference from target) parts for each feature category.
 
