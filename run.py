@@ -40,7 +40,7 @@ def main(output_folder, cad_folder, images_folder, csv_directory):
         with open(os.path.join(output_folder, "metadata_overwrite.json"), "w") as fp:
             json.dump(metadata_dict, fp)
 
-    rows = parts_df[:3].iterrows()
+    rows = parts_df.iterrows()
     print("Making heatmaps")
     for idx, row in tqdm(rows, total=parts_df.shape[0]):
         try:
