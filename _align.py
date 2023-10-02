@@ -25,7 +25,7 @@ def align_ccorr(cad_dir, scan_dir, output_dirs, angle_bounds=(-180,180)):
 
     assert cad_img.shape == scan_img.shape, "Cad image and scan image must have the same width and height"
 
-    # pad cad image and scan image to allow rotation at any angle without clipping the content. there is enough padding to fully contain a circle whose radius is the distance between the centre and a corner of the image.
+    # pad cad image and scan image to allow rotation at any angle without clipping the content. there is enough padding to fully contain a circle whose radius is the distance between the centre and a corner of the unpadded image.
 
     diameter = math.ceil(math.sqrt(cad_img.shape[0]**2 + cad_img.shape[1]**2))
 
