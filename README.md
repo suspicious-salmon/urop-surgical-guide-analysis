@@ -7,6 +7,7 @@ This repository contains code to analyse Bill King's sugrical guide dataset. The
 - segmenting the photos
 - aligning photos to corresponding cross-sections
 - analysing the results
+- 
 Please note that I have already run this code on the dataset. The folder containing the results is at <link!>
 
 There are also 2 other files, aimed at visualising and understanding the resutls.
