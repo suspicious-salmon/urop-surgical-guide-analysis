@@ -63,7 +63,7 @@ def main(output_folder, cad_folder, images_folder, csv_directory):
                 angle_bounds=(-60,0)
             )
 
-            # process and write scan file to destination folder
+            # segment aligned scan into binary image and write to destination folder
             _scan.process_scan(os.path.join(output_folder, "aligned_scans", row["serial"] + "_aligned.tif"),
                                 os.path.join(output_folder, "steps", row["serial"] + "_processed.tif"),
                                 save_steps=False)
