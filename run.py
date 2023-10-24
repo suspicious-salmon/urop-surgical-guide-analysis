@@ -87,8 +87,8 @@ def main(output_folder, cad_folder, images_folder, csv_directory):
     _metrics.get_directory_metrics(os.path.join(output_folder, "heatmaps"), output_folder)
 
 if __name__ == "__main__":
-    root_dataset_folder = r"E:\greg\Dogs\UIUCMxD"
-    root_output_folder = r"E:\greg\Organised Code\EnvTests\Results\Run1"
+    root_dataset_folder = r"<>\Surgical Guides\Dataset"
+    root_output_folder = r"<>Results\MyRun1"
     
     cad_folder = os.path.join(root_dataset_folder, "CAD")
     images_folder = os.path.join(root_dataset_folder, "Images")
