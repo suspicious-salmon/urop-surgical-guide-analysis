@@ -27,7 +27,7 @@ Also needed (for pyimagej) is Java OpenJDK, mine was version 20. Set your JAVA_H
 Set up the environment by, in anaconda terminal in repository folder, executing `conda env create -f environment.yml` (this might take a while to install everything). It will create an environment called my_surgical_guide_env, or whatever you change the first line to in `environment.yml`.
 
 Then, edit `run.py`:
-- Change `root_dataset_folder` to the directory where the folder containing Bill King's dataset is.
+- Change `root_dataset_folder` to the directory where the folder containing the UIUC team's dataset is.
 - Change `root_output_folder` to the directory where you would like your results to be stored. Be warned: for 258 surgical parts, this needs about 23GB of space!
 
 Now try executing `run.py` in the environment you just made - it should work.
